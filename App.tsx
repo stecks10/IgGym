@@ -5,7 +5,8 @@ import {
 } from '@expo-google-fonts/roboto';
 
 import { Loading } from '@components/Loading';
-import { Center, GluestackUIProvider, Text } from '@gluestack-ui/themed';
+import { GluestackUIProvider } from '@gluestack-ui/themed';
+import { SignIn } from '@screens/SignIn';
 import { config } from './config/gluestack-ui.config';
 
 export default function App() {
@@ -16,13 +17,7 @@ export default function App() {
 
   return (
     <GluestackUIProvider config={config}>
-      {fontsLoaded ? (
-        <Center flex={1} bg='$gray700'>
-          <Text color='black'>Home</Text>
-        </Center>
-      ) : (
-        <Loading />
-      )}
+      {fontsLoaded ? <SignIn /> : <Loading />}
     </GluestackUIProvider>
   );
 }
