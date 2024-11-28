@@ -9,8 +9,8 @@ export function Input({ ...props }: InputProps) {
       bg='$gray700'
       h='$14'
       px='$4'
-      borderWidth='$0'
       borderRadius='$md'
+      borderColor='$gray500'
       $focus={{
         borderWidth: '$1',
         borderColor: '$green500',
