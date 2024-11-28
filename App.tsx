@@ -3,10 +3,11 @@ import {
   Roboto_700Bold,
   useFonts,
 } from '@expo-google-fonts/roboto';
-import { View } from 'react-native';
 
+import { Loading } from '@components/Loading';
 import { Center, GluestackUIProvider, Text } from '@gluestack-ui/themed';
 import { config } from './config/gluestack-ui.config';
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
@@ -20,7 +21,7 @@ export default function App() {
           <Text color='black'>Home</Text>
         </Center>
       ) : (
-        <View />
+        <Loading />
       )}
     </GluestackUIProvider>
   );
