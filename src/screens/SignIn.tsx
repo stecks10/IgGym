@@ -24,7 +24,7 @@ export function SignIn() {
           </Text>
         </Center>
 
-        <Center gap='$2'>
+        <Center gap='$3'>
           <Heading color='$gray100'>Acesse a conta</Heading>
           <Input
             placeholder='Email'
@@ -34,6 +34,14 @@ export function SignIn() {
           <Input placeholder='Senha' secureTextEntry />
 
           <Button title='Acessar' />
+        </Center>
+
+        <Center flex={1} justifyContent='flex-end' mb='$4'>
+          <Text color='$gray100' fontSize='$sm' mb='$3' fontFamily='$body'>
+            Ainda não tem conta?
+          </Text>
+
+          <Button title='Criar conta' variant='outline' />
         </Center>
       </VStack>
     </VStack>
