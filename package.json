@@ -14,7 +14,11 @@
     "expo-font": "~13.0.1",
     "expo-status-bar": "~2.0.0",
     "react": "18.3.1",
-    "react-native": "0.76.3"
+    "react-native": "0.76.3",
+    "react-native-svg": "15.2.0",
+    "@gluestack-style/react": "^1.0.57",
+    "@gluestack-ui/config": "^1.1.19",
+    "@gluestack-ui/themed": "^1.1.39"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
