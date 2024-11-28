@@ -5,7 +5,7 @@ import Logo from '@assets/logo.svg';
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 
-export function SignIn() {
+export function SignUp() {
   return (
     <VStack flex={1} bg='$gray700'>
       <Image
@@ -24,24 +24,21 @@ export function SignIn() {
           </Text>
         </Center>
 
-        <Center pt={'$32'} gap='$3'>
-          <Heading color='$gray100'>Acesse a conta</Heading>
+        <Center pt={'$24'} gap='$3'>
+          <Heading color='$gray100'>Crie sua conta</Heading>
           <Input
             placeholder='Email'
             keyboardType='email-address'
             autoCapitalize='none'
           />
           <Input placeholder='Senha' secureTextEntry />
+          <Input placeholder='Confirme a senha' secureTextEntry />
 
-          <Button title='Acessar' />
+          <Button title='Criar conta' />
         </Center>
 
         <Center flex={1} justifyContent='flex-end' mb='$4'>
-          <Text color='$gray100' fontSize='$sm' mb='$3' fontFamily='$body'>
-            Ainda não tem conta?
-          </Text>
-
-          <Button title='Criar conta' variant='outline' />
+          <Button title='Voltar para o login' variant='outline' />
         </Center>
       </VStack>
     </VStack>
