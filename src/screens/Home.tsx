@@ -7,7 +7,7 @@ import { FlatList } from 'react-native';
 
 export function Home() {
   const [groups, setGroups] = useState([
-    'Costas',
+    'costas',
     'ombro',
     'triceps',
     'bíceps',
@@ -18,10 +18,6 @@ export function Home() {
     'Puxada frontal',
     'Remada unilateral',
     'Puxada lateral',
-    'Puxada unilateral',
-    'Remada unilateral',
-    'Puxada unilateral',
-    'Remada unilateral',
   ]);
 
   return (
@@ -34,7 +30,7 @@ export function Home() {
         renderItem={({ item }) => (
           <Group
             name={item}
-            isActive={groupSelected === item}
+            isActive={groupSelected.toLowerCase() === item.toLowerCase()}
             onPress={() => setGroupSelected(item)}
           />
         )}
