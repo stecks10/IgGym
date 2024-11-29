@@ -26,13 +26,14 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 export function AppRoutes() {
   const { tokens } = gluestackUIConfig;
-  const iconSize = tokens.space['6'];
+  const iconSize = tokens.space['5/6'];
 
   return (
     <Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
+        tabBarActiveTintColor: tokens.colors.green500,
       }}
     >
       <Screen
