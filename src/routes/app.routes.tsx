@@ -20,7 +20,12 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 export function AppRoutes() {
   return (
-    <Navigator screenOptions={{ headerShown: false }}>
+    <Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+      }}
+    >
       <Screen name='home' component={Home} />
       <Screen name='history' component={History} />
       <Screen name='profile' component={Profile} />
