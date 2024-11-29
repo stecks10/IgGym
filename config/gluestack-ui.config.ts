@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import { AnimationResolver } from '@gluestack-style/animation-resolver';
 import { MotionAnimationDriver } from '@gluestack-style/legend-motion-animation-driver';
 import { createComponents, createConfig } from '@gluestack-style/react';
@@ -214,7 +215,6 @@ export const gluestackUIConfig = createConfig({
       gray500: '#29292E',
       gray600: '#202024',
       gray700: '#121214',
-      gray900: '#121214',
       warmGray50: '#fafaf9',
       warmGray100: '#f5f5f4',
       warmGray200: '#e7e5e4',
@@ -547,7 +547,6 @@ export const gluestackUIConfig = createConfig({
       extraBlack: '950',
     },
     fonts: {
-      mono: undefined,
       heading: 'Roboto_700Bold',
       body: 'Roboto_400Regular',
     },
@@ -558,7 +557,6 @@ export const gluestackUIConfig = createConfig({
       md: 16,
       lg: 18,
       xl: 20,
-
       '2xl': 24,
       '3xl': 30,
       '4xl': 36,

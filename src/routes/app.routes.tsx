@@ -11,7 +11,8 @@ import HistorySvg from '@assets/history.svg';
 import HomeSvg from '@assets/home.svg';
 import ProfileSvg from '@assets/profile.svg';
 
-import { gluestackUIConfig } from '@gluestack-ui/config';
+import { Platform } from 'react-native';
+import { gluestackUIConfig } from '../../config/gluestack-ui.config';
 
 type AppRoutes = {
   home: undefined;
@@ -26,7 +27,7 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 export function AppRoutes() {
   const { tokens } = gluestackUIConfig;
-  const iconSize = tokens.space['5/6'];
+  const iconSize = tokens.space['8'];
 
   return (
     <Navigator
@@ -34,6 +35,14 @@ export function AppRoutes() {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: tokens.colors.green500,
+        tabBarInactiveTintColor: tokens.colors.gray200,
+        tabBarStyle: {
+          backgroundColor: tokens.colors.gray600,
+          borderTopWidth: 0,
+          height: Platform.OS === 'android' ? 'auto' : 96,
+          paddingBottom: tokens.space['10'],
+          paddingTop: tokens.space['6'],
+        },
       }}
     >
       <Screen
@@ -66,7 +75,7 @@ export function AppRoutes() {
       <Screen
         name='exercise'
         component={Exercise}
-        options={{ tabBarIcon: () => null }}
+        options={{ tabBarButton: () => null }}
       />
     </Navigator>
   );
