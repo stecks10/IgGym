@@ -12,7 +12,17 @@ export function Home() {
     'triceps',
     'bíceps',
   ]);
+
   const [groupSelected, setGroupSelected] = useState('Costas');
+  const [exercises, setExercises] = useState([
+    'Puxada frontal',
+    'Remada unilateral',
+    'Puxada lateral',
+    'Puxada unilateral',
+    'Remada unilateral',
+    'Puxada unilateral',
+    'Remada unilateral',
+  ]);
 
   return (
     <VStack flex={1}>
@@ -34,18 +44,25 @@ export function Home() {
         style={{ marginVertical: 40, maxHeight: 44, minHeight: 44 }}
       />
 
-      <VStack px='$8'>
+      <VStack px='$8' flex={1}>
         <HStack justifyContent='space-between' mb={'$5'} alignItems='center'>
           <Heading color='$gray200' fontSize={'$md'} fontFamily='$heading'>
             Exercícios
           </Heading>
 
           <Text color='$gray200' fontSize={'$sm'} fontFamily='$body'>
-            4
+            {exercises.length}
           </Text>
         </HStack>
 
-        <ExerciseCard />
+        <FlatList
+          key={groupSelected}
+          data={exercises}
+          keyExtractor={(item) => item}
+          renderItem={() => <ExerciseCard />}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        />
       </VStack>
     </VStack>
   );
