@@ -1,22 +1,31 @@
 import { Input as GluestackInput, InputField } from '@gluestack-ui/themed';
 import { ComponentProps } from 'react';
 
-type InputProps = ComponentProps<typeof InputField>;
+type InputProps = ComponentProps<typeof InputField> & {
+  isReadOnly?: boolean;
+};
 
-export function Input({ ...props }: InputProps) {
+export function Input({ isReadOnly = false, ...props }: InputProps) {
   return (
     <GluestackInput
-      bg='$gray700'
       h='$14'
-      px='$4'
+      borderWidth='$0'
       borderRadius='$md'
       borderColor='$gray500'
       $focus={{
         borderWidth: '$1',
         borderColor: '$green500',
       }}
+      isReadOnly={isReadOnly}
+      opacity={isReadOnly ? 0.5 : 1}
     >
-      <InputField color='$white' placeholderTextColor='$gray300' {...props} />
+      <InputField
+        bg='$gray700'
+        px='$4'
+        color='$white'
+        placeholderTextColor='$gray300'
+        {...props}
+      />
     </GluestackInput>
   );
 }
