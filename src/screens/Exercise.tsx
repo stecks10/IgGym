@@ -1,5 +1,12 @@
 import BodySvg from '@assets/body.svg';
-import { Heading, HStack, Icon, Text, VStack } from '@gluestack-ui/themed';
+import {
+  Heading,
+  HStack,
+  Icon,
+  Image,
+  Text,
+  VStack,
+} from '@gluestack-ui/themed';
 import { useNavigation } from '@react-navigation/native';
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { ArrowLeft } from 'lucide-react-native';
@@ -40,6 +47,19 @@ export function Exercise() {
             </Text>
           </HStack>
         </HStack>
+      </VStack>
+      <VStack p={'$8'} flex={1} mt={'$6'} bg='$gray600'>
+        <Image
+          source={{
+            uri: 'https://s2-ge.glbimg.com/u7ggtx-50ZJ_sW1YWiQ-gkAYNH0=/1200x/smart/filters:cover():strip_icc()/s.glbimg.com/es/ge/f/original/2017/07/14/istock-538489090.jpg',
+          }}
+          alt='Imagem do exercício'
+          mb={'$3'}
+          resizeMode='cover'
+          rounded={'$lg'}
+          w={'$full'}
+          h={'$80'}
+        />
       </VStack>
     </VStack>
   );
