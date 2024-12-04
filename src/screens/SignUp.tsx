@@ -23,6 +23,10 @@ export function SignUp() {
     navigator.navigate('SignIn');
   }
 
+  function handleSignUp(data: any) {
+    console.log(data);
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -69,7 +73,6 @@ export function SignUp() {
                 <Input
                   placeholder='E-mail'
                   keyboardType='email-address'
-                  secureTextEntry
                   onChangeText={onChange}
                   value={value}
                 />
@@ -98,11 +101,13 @@ export function SignUp() {
                   secureTextEntry
                   onChangeText={onChange}
                   value={value}
+                  onSubmitEditing={handleSubmit(handleSignUp)}
+                  returnKeyType='send'
                 />
               )}
             />
 
-            <Button onPress={() => {}} title='Criar conta' />
+            <Button onPress={handleSubmit(handleSignUp)} title='Criar conta' />
           </Center>
 
           <Center flex={1} justifyContent='flex-end' mb='$4'>
