@@ -2,9 +2,9 @@ import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
-import { Center, Heading, Text, VStack } from '@gluestack-ui/themed';
+import { Center, Heading, Text, VStack, useToast } from '@gluestack-ui/themed';
 import { useState } from 'react';
-import { Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native';
 
 import { ToastMessage } from '@components/ToastMessage';
 import * as FileSystem from 'expo-file-system';
@@ -12,6 +12,8 @@ import * as ImagePicker from 'expo-image-picker';
 
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/stecks10.png');
+
+  const toast = useToast();
 
   async function handleUserPhotoSelection() {
     try {
@@ -34,31 +36,43 @@ export function Profile() {
         };
 
         if (photoInfo.size && photoInfo.size > 5_000_000) {
-          Alert.alert('Arquivo muito grande');
-          return; // Não permite alterar a imagem
+          toast.show({
+            placement: 'top',
+            render: ({ id }) => (
+              <ToastMessage
+                id={id}
+                title='Imagem muito grande'
+                description='Escolha uma imagem com no máximo 5MB'
+                action='error'
+                onClose={() => toast.close(id)}
+              />
+            ),
+          });
+          return;
         }
-
         setUserPhoto(photoUri);
       }
     } catch (error) {
-      console.error(error); // Apenas para depuração no console
-      Alert.alert(
-        'Erro',
-        'Ocorreu um erro ao selecionar a imagem. Tente novamente.'
-      );
+      console.error(error);
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title='Erro ao escolher a foto'
+            description='Ocorreu um erro ao escolher a foto'
+            action='error'
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     }
   }
 
   return (
     <VStack flex={1}>
       <ScreenHeader title='Perfil' />
-      <ToastMessage
-        id='1'
-        title='Alterado com sucesso'
-        action='success'
-        description='teste'
-        onClose={() => {}}
-      />
+
       <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt={'$6'} px={'$10'}>
           <UserPhoto
