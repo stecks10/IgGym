@@ -4,8 +4,9 @@ import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { Center, Heading, Text, VStack } from '@gluestack-ui/themed';
 import { useState } from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { Alert, ScrollView, TouchableOpacity } from 'react-native';
 
+import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 
 export function Profile() {
@@ -23,7 +24,18 @@ export function Profile() {
       return;
     }
 
-    setUserPhoto(photoSelected.assets[0].uri);
+    const photoUri = photoSelected.assets[0].uri;
+
+    if (photoUri) {
+      const photoInfo = (await FileSystem.getInfoAsync(photoUri)) as {
+        size: number;
+      };
+
+      photoInfo.size &&
+        photoInfo.size > 5_000_000 &&
+        Alert.alert('Arquivo muito grande');
+      setUserPhoto(photoUri);
+    }
   }
 
   return (
