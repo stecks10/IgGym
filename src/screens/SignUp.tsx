@@ -24,10 +24,28 @@ type FormDataProps = {
 };
 
 const VALIDATION_RULES = {
-  name: { required: 'Informe o nome' },
-  email: { required: 'Informe o e-mail' },
-  password: { required: 'Informe a senha' },
-  password_confirm: { required: 'Confirme a senha' },
+  name: {
+    required: 'Informe o nome',
+    minLength: { value: 3, message: 'O nome deve ter pelo menos 3 caracteres' },
+  },
+  email: {
+    required: 'Informe o e-mail',
+    pattern: {
+      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: 'Informe um e-mail válido',
+    },
+  },
+  password: {
+    required: 'Informe a senha',
+    pattern: {
+      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+      message:
+        'A senha deve ter pelo menos 6 caracteres, incluindo letras e números',
+    },
+  },
+  password_confirm: {
+    required: 'Confirme a senha',
+  },
 };
 
 const ControlledInput = ({
@@ -83,6 +101,9 @@ export function SignUp() {
 
   const handleSignUp = useCallback(
     ({ name, email, password, password_confirm }: FormDataProps) => {
+      if (password !== password_confirm) {
+        return console.log('As senhas não coincidem');
+      }
       console.log(name, email, password, password_confirm);
     },
     []
