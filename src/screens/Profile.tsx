@@ -13,28 +13,38 @@ export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/stecks10.png');
 
   async function handleUserPhotoSelection() {
-    const photoSelected = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      aspect: [4, 4],
-      allowsEditing: true,
-    });
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      });
 
-    if (photoSelected.canceled) {
-      return;
-    }
+      if (photoSelected.canceled) {
+        return;
+      }
 
-    const photoUri = photoSelected.assets[0].uri;
+      const photoUri = photoSelected.assets[0].uri;
 
-    if (photoUri) {
-      const photoInfo = (await FileSystem.getInfoAsync(photoUri)) as {
-        size: number;
-      };
+      if (photoUri) {
+        const photoInfo = (await FileSystem.getInfoAsync(photoUri)) as {
+          size: number;
+        };
 
-      photoInfo.size &&
-        photoInfo.size > 5_000_000 &&
-        Alert.alert('Arquivo muito grande');
-      setUserPhoto(photoUri);
+        if (photoInfo.size && photoInfo.size > 5_000_000) {
+          Alert.alert('Arquivo muito grande');
+          return; // Não permite alterar a imagem
+        }
+
+        setUserPhoto(photoUri);
+      }
+    } catch (error) {
+      console.error(error); // Apenas para depuração no console
+      Alert.alert(
+        'Erro',
+        'Ocorreu um erro ao selecionar a imagem. Tente novamente.'
+      );
     }
   }
 
