@@ -6,6 +6,7 @@ import { Center, Heading, Text, VStack } from '@gluestack-ui/themed';
 import { useState } from 'react';
 import { Alert, ScrollView, TouchableOpacity } from 'react-native';
 
+import { ToastMessage } from '@components/ToastMessage';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -51,6 +52,13 @@ export function Profile() {
   return (
     <VStack flex={1}>
       <ScreenHeader title='Perfil' />
+      <ToastMessage
+        id='1'
+        title='Alterado com sucesso'
+        action='success'
+        description='teste'
+        onClose={() => {}}
+      />
       <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt={'$6'} px={'$10'}>
           <UserPhoto
