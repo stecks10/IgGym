@@ -13,6 +13,7 @@ import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
+import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 type FormDataProps = {
@@ -22,22 +23,70 @@ type FormDataProps = {
   password_confirm: string;
 };
 
+const VALIDATION_RULES = {
+  name: { required: 'Informe o nome' },
+  email: { required: 'Informe o e-mail' },
+  password: { required: 'Informe a senha' },
+  password_confirm: { required: 'Confirme a senha' },
+};
+
+const ControlledInput = ({
+  control,
+  name,
+  placeholder,
+  keyboardType = 'default',
+  secureTextEntry = false,
+  onSubmitEditing,
+  returnKeyType,
+}: {
+  control: any;
+  name: keyof FormDataProps;
+  placeholder: string;
+  keyboardType?: 'default' | 'email-address';
+  secureTextEntry?: boolean;
+  onSubmitEditing?: () => void;
+  returnKeyType?: 'default' | 'send';
+}) => (
+  <Controller
+    control={control}
+    name={name}
+    rules={VALIDATION_RULES[name]}
+    render={({ field: { onChange, value }, fieldState: { error } }) => (
+      <>
+        <Input
+          placeholder={placeholder}
+          value={value}
+          onChangeText={onChange}
+          keyboardType={keyboardType}
+          secureTextEntry={secureTextEntry}
+          onSubmitEditing={onSubmitEditing}
+          returnKeyType={returnKeyType}
+        />
+        {error && <Text color='$red500'>{error.message}</Text>}
+      </>
+    )}
+  />
+);
+
 export function SignUp() {
   const navigator = useNavigation<AuthNavigatorRoutesProps>();
-  const { control, handleSubmit, formState } = useForm<FormDataProps>();
 
-  function handleGoBackLogin() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>();
+
+  const handleGoBackLogin = useCallback(() => {
     navigator.navigate('SignIn');
-  }
+  }, [navigator]);
 
-  function handleSignUp({
-    name,
-    email,
-    password,
-    password_confirm,
-  }: FormDataProps) {
-    console.log(name, email, password, password_confirm);
-  }
+  const handleSignUp = useCallback(
+    ({ name, email, password, password_confirm }: FormDataProps) => {
+      console.log(name, email, password, password_confirm);
+    },
+    []
+  );
 
   return (
     <ScrollView
@@ -47,7 +96,7 @@ export function SignUp() {
       <VStack flex={1} bg='$gray700'>
         <Image
           source={BackgroundImg}
-          w={'$full'}
+          w='$full'
           h={624}
           defaultSource={BackgroundImg}
           alt='Pessoas treinando'
@@ -61,62 +110,29 @@ export function SignUp() {
             </Text>
           </Center>
 
-          <Center pt={'$24'} gap='$3'>
+          <Center pt='$10' gap='$3'>
             <Heading color='$gray100'>Crie sua conta</Heading>
 
-            <Controller
-              control={control}
-              name='name'
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder='Name'
-                  value={value}
-                  keyboardType='default'
-                  autoCapitalize='none'
-                  onChangeText={onChange}
-                />
-              )}
-            />
-
-            <Controller
+            <ControlledInput control={control} name='name' placeholder='Nome' />
+            <ControlledInput
               control={control}
               name='email'
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder='E-mail'
-                  keyboardType='email-address'
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
+              placeholder='E-mail'
+              keyboardType='email-address'
             />
-
-            <Controller
+            <ControlledInput
               control={control}
               name='password'
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder='Senha'
-                  secureTextEntry
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
+              placeholder='Senha'
+              secureTextEntry
             />
-
-            <Controller
+            <ControlledInput
               control={control}
               name='password_confirm'
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder='Confirme a senha'
-                  secureTextEntry
-                  onChangeText={onChange}
-                  value={value}
-                  onSubmitEditing={handleSubmit(handleSignUp)}
-                  returnKeyType='send'
-                />
-              )}
+              placeholder='Confirme a senha'
+              secureTextEntry
+              onSubmitEditing={handleSubmit(handleSignUp)}
+              returnKeyType='send'
             />
 
             <Button onPress={handleSubmit(handleSignUp)} title='Criar conta' />
