@@ -15,16 +15,28 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 import { Controller, useForm } from 'react-hook-form';
 
+type FormDataProps = {
+  name: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+};
+
 export function SignUp() {
   const navigator = useNavigation<AuthNavigatorRoutesProps>();
-  const { control, handleSubmit, formState } = useForm();
+  const { control, handleSubmit, formState } = useForm<FormDataProps>();
 
   function handleGoBackLogin() {
     navigator.navigate('SignIn');
   }
 
-  function handleSignUp(data: any) {
-    console.log(data);
+  function handleSignUp({
+    name,
+    email,
+    password,
+    password_confirm,
+  }: FormDataProps) {
+    console.log(name, email, password, password_confirm);
   }
 
   return (
@@ -94,7 +106,7 @@ export function SignUp() {
 
             <Controller
               control={control}
-              name='confirmPassword'
+              name='password_confirm'
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder='Confirme a senha'
