@@ -9,7 +9,7 @@ export function Input({ isReadOnly = false, ...props }: InputProps) {
   return (
     <GluestackInput
       h='$14'
-      borderWidth='$0'
+      borderWidth='$1'
       borderRadius='$md'
       borderColor='$gray500'
       $focus={{

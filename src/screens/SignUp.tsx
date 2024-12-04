@@ -13,12 +13,21 @@ import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
+import { useState } from 'react';
 
 export function SignUp() {
   const navigator = useNavigation<AuthNavigatorRoutesProps>();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
 
   function handleGoBackLogin() {
     navigator.navigate('SignIn');
+  }
+
+  function handleSignUp() {
+    console.log(name);
   }
   return (
     <ScrollView
@@ -45,14 +54,30 @@ export function SignUp() {
           <Center pt={'$24'} gap='$3'>
             <Heading color='$gray100'>Crie sua conta</Heading>
             <Input
-              placeholder='Email'
-              keyboardType='email-address'
+              placeholder='Name'
+              keyboardType='default'
               autoCapitalize='none'
+              onChangeText={setName}
             />
-            <Input placeholder='Senha' secureTextEntry />
-            <Input placeholder='Confirme a senha' secureTextEntry />
+            <Input
+              placeholder='E-mail'
+              keyboardType='email-address'
+              secureTextEntry
+              onChangeText={setEmail}
+            />
+            <Input
+              onChangeText={setPassword}
+              placeholder='Senha'
+              secureTextEntry
+            />
 
-            <Button title='Criar conta' />
+            <Input
+              onChangeText={setPasswordConfirm}
+              placeholder='Confirme a senha'
+              secureTextEntry
+            />
+
+            <Button onPress={handleSignUp} title='Criar conta' />
           </Center>
 
           <Center flex={1} justifyContent='flex-end' mb='$4'>
