@@ -24,12 +24,20 @@ export function Input({
   return (
     <FormControl isInvalid={invalid} mb='$4' w='$full'>
       <GluestackInput
+        isInvalid={invalid}
         h='$14'
-        borderWidth='$1'
+        borderWidth='$0'
         borderRadius='$md'
-        $focus={{ borderWidth: 1, borderColor: '$green500' }}
+        $focus={{
+          borderWidth: 1,
+          borderColor: invalid ? '$red500' : '$green500',
+        }}
         isReadOnly={isReadOnly}
         opacity={isReadOnly ? 0.5 : 1}
+        $invalid={{
+          borderColor: '$red500',
+          borderWidth: 1,
+        }}
       >
         <InputField
           px='$4'
