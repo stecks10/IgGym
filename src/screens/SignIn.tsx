@@ -48,7 +48,7 @@ export function SignIn() {
     navigator.navigate('SignUp');
   }
 
-  function handleSignUp({ email, password }: FormDataProps) {
+  async function handleSignIn({ email, password }: FormDataProps) {
     singIn(email, password);
   }
 
@@ -99,12 +99,12 @@ export function SignIn() {
                   onChangeText={onChange}
                   value={value}
                   errorMessage={errors.password?.message}
-                  onSubmitEditing={handleSubmit(handleSignUp)}
+                  onSubmitEditing={handleSubmit(handleSignIn)}
                 />
               )}
             />
 
-            <Button title='Acessar' onPress={handleSubmit(handleSignUp)} />
+            <Button title='Acessar' onPress={handleSubmit(handleSignIn)} />
           </Center>
 
           <Center flex={1} justifyContent='flex-end' mb='$4'>
