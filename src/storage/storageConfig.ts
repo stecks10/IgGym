@@ -1,3 +1,4 @@
 const USER_STORAGE = '@gymignite:user';
+const AUTH_TOKEN_STORAGE = '@gymignite:token';
 
-export { USER_STORAGE };
+export { AUTH_TOKEN_STORAGE, USER_STORAGE };
