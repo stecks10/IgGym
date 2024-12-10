@@ -7,12 +7,11 @@ import { AuthRoutes } from './auth.routes';
 
 import { useAuth } from '@hooks/useAuth';
 import { useContext } from 'react';
+import { AppRoutes } from './app.routes';
 
 export function Routes() {
   const contextData = useContext(AuthContext);
   const { user } = useAuth();
-
-  console.log(contextData);
 
   const theme = DefaultTheme;
   theme.colors.background = gluestackUIConfig.tokens.colors.gray700;
@@ -20,7 +19,7 @@ export function Routes() {
   return (
     <Box flex={1} bg='$gray700'>
       <NavigationContainer theme={theme}>
-        <AuthRoutes />
+        {user.id ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
   );
