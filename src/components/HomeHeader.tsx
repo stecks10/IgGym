@@ -1,13 +1,14 @@
-import { Heading, HStack, Icon, Text, VStack } from '@gluestack-ui/themed';
+import { HStack, Icon, Text, VStack } from '@gluestack-ui/themed';
 import { UserPhoto } from './UserPhoto';
 
 import { useAuth } from '@hooks/useAuth';
 import { LogOut } from 'lucide-react-native';
 
 import defaultUserPhotoImg from '@assets/userPhotoDefault.png';
+import { TouchableOpacity } from 'react-native';
 
 export function HomeHeader() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <HStack
@@ -28,10 +29,11 @@ export function HomeHeader() {
         <Text color='$white' fontSize={'$sm'}>
           {user.name}
         </Text>
-        <Heading color='$white' fontSize={'$md'}></Heading>
       </VStack>
 
-      <Icon as={LogOut} color='$gray200' size='xl' />
+      <TouchableOpacity onPress={signOut}>
+        <Icon as={LogOut} color='$gray200' size='xl' />
+      </TouchableOpacity>
     </HStack>
   );
 }
