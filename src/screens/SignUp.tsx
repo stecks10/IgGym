@@ -62,7 +62,6 @@ export function SignUp() {
   async function handleSignUp({ name, email, password }: FormDataProps) {
     try {
       const response = await api.post('/users', { name, email, password });
-      console.log(response.data);
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
@@ -71,12 +70,7 @@ export function SignUp() {
       toast.show({
         placement: 'top',
         render: ({ id }) => (
-          <ToastMessage
-            id={id}
-            title={title}
-            action='error'
-            onClose={() => toast.close(id)}
-          />
+          <ToastMessage id={id} title={title} action='error' />
         ),
       });
     }

@@ -20,6 +20,7 @@ import { ToastMessage } from '@components/ToastMessage';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '@hooks/useAuth';
 import { AppError } from '@utils/AppError';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -37,6 +38,7 @@ const signInSchema = yup.object({
 });
 
 export function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
   const { singIn } = useAuth();
   const toast = useToast();
   const {
@@ -54,18 +56,24 @@ export function SignIn() {
 
   async function handleSignIn({ email, password }: FormDataProps) {
     try {
+      setIsLoading(true);
       await singIn(email, password);
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
         : 'Não foi possível entrar. Tente novamente mais tarde';
+
+      setIsLoading(false);
+
       toast.show({
         placement: 'top',
         render: ({ id }) => (
           <ToastMessage id={id} title={title} action='error' />
         ),
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -121,7 +129,11 @@ export function SignIn() {
               )}
             />
 
-            <Button title='Acessar' onPress={handleSubmit(handleSignIn)} />
+            <Button
+              title='Acessar'
+              onPress={handleSubmit(handleSignIn)}
+              isLoading={isLoading}
+            />
           </Center>
 
           <Center flex={1} justifyContent='flex-end' mb='$4'>
