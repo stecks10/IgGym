@@ -7,10 +7,12 @@ import { useState } from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 
 import { ToastMessage } from '@components/ToastMessage';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '@hooks/useAuth';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 type FormDataProps = {
   name: string;
@@ -24,13 +26,33 @@ export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/stecks10.png');
 
   const toast = useToast();
+
+  const profileSchema = yup.object({
+    name: yup
+      .string()
+      .required('Nome obrigatório')
+      .min(3, 'No mínimo 3 dígitos'),
+    email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
+    password: yup.string().required('Senha obrigatória'),
+    old_password: yup.string().required('Senha antiga obrigatória'),
+    password_confirm: yup.string().required('Confirmação de senha obrigatória'),
+  });
+
   const { user } = useAuth();
 
-  const { control, handleSubmit } = useForm<FormDataProps>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
     defaultValues: {
       name: user.name,
       email: user.email,
+      password: '',
+      old_password: '',
+      password_confirm: '',
     },
+    resolver: yupResolver(profileSchema),
   });
 
   async function handleUserPhotoSelection() {
@@ -121,6 +143,7 @@ export function Profile() {
                   bg='$gray600'
                   onChangeText={onChange}
                   value={value}
+                  errorMessage={errors.name?.message}
                 />
               )}
             />
@@ -133,6 +156,8 @@ export function Profile() {
                   bg='$gray600'
                   onChangeText={onChange}
                   value={value}
+                  isDisabled
+                  errorMessage={errors.email?.message}
                 />
               )}
             />
@@ -159,6 +184,8 @@ export function Profile() {
                   bg='$gray600'
                   onChangeText={onChange}
                   value={value}
+                  secureTextEntry
+                  textContentType='oneTimeCode'
                 />
               )}
             />
@@ -171,6 +198,9 @@ export function Profile() {
                   bg='$gray600'
                   onChangeText={onChange}
                   value={value}
+                  secureTextEntry
+                  errorMessage={errors.password?.message}
+                  textContentType='oneTimeCode'
                 />
               )}
             />
@@ -183,6 +213,9 @@ export function Profile() {
                   bg='$gray600'
                   onChangeText={onChange}
                   value={value}
+                  secureTextEntry
+                  textContentType='oneTimeCode'
+                  errorMessage={errors.password_confirm?.message}
                 />
               )}
             />
