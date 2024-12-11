@@ -3,10 +3,10 @@ import { Group } from '@components/Group';
 import { HomeHeader } from '@components/HomeHeader';
 import { ToastMessage } from '@components/ToastMessage';
 import { Heading, HStack, Text, useToast, VStack } from '@gluestack-ui/themed';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { AppError } from '@utils/AppError';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { api } from '../service/api';
 
@@ -15,11 +15,7 @@ export function Home() {
   const [groups, setGroups] = useState<string[]>([]);
 
   const [groupSelected, setGroupSelected] = useState('Costas');
-  const [exercises, setExercises] = useState([
-    'Puxada frontal',
-    'Remada unilateral',
-    'Puxada lateral',
-  ]);
+  const [exercises, setExercises] = useState([]);
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
 
@@ -45,9 +41,35 @@ export function Home() {
       });
     }
   }
+
+  async function fetchExercisesByGroup() {
+    try {
+      const response = await api.get(`/exercises/bygroup/${groupSelected}`);
+      setExercises(response.data);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível carregar os exercícios';
+      console.log(error);
+
+      toast.show({
+        render: ({ id }) => (
+          <ToastMessage id={id} title={title} action='error' />
+        ),
+      });
+    }
+  }
+
   useEffect(() => {
     fetchGroups();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchExercisesByGroup();
+    }, [groupSelected])
+  );
 
   return (
     <VStack flex={1}>
