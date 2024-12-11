@@ -26,7 +26,7 @@ export function Profile() {
   const toast = useToast();
   const { user } = useAuth();
 
-  const { control } = useForm<FormDataProps>({
+  const { control, handleSubmit } = useForm<FormDataProps>({
     defaultValues: {
       name: user.name,
       email: user.email,
@@ -83,6 +83,10 @@ export function Profile() {
         ),
       });
     }
+  }
+
+  async function handleProfileUpdate(data: FormDataProps) {
+    console.log(data);
   }
 
   return (
@@ -148,7 +152,7 @@ export function Profile() {
           <Center w={'$full'} gap={'$4'}>
             <Controller
               control={control}
-              name='password'
+              name='old_password'
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder='Senha antiga'
@@ -183,7 +187,10 @@ export function Profile() {
               )}
             />
 
-            <Button title='Atualizar' />
+            <Button
+              title='Atualizar'
+              onPress={handleSubmit(handleProfileUpdate)}
+            />
           </Center>
         </Center>
       </ScrollView>
