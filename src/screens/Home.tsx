@@ -2,6 +2,7 @@ import { ExerciseCard } from '@components/ExerciseCard';
 import { Group } from '@components/Group';
 import { HomeHeader } from '@components/HomeHeader';
 import { ToastMessage } from '@components/ToastMessage';
+import { ExerciseDTO } from '@dtos/ExerciseDTO';
 import { Heading, HStack, Text, useToast, VStack } from '@gluestack-ui/themed';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
@@ -15,7 +16,7 @@ export function Home() {
   const [groups, setGroups] = useState<string[]>([]);
 
   const [groupSelected, setGroupSelected] = useState('Costas');
-  const [exercises, setExercises] = useState([]);
+  const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
 
@@ -105,7 +106,7 @@ export function Home() {
         <FlatList
           key={groupSelected}
           data={exercises}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.id}
           renderItem={() => (
             <ExerciseCard onPress={handleOpenExerciseDetails} />
           )}
