@@ -9,6 +9,7 @@ import {
 } from '@gluestack-ui/themed';
 import { ChevronRight } from 'lucide-react-native';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { api } from '../service/api';
 
 type Props = TouchableOpacityProps & {
   data: ExerciseDTO;
@@ -27,7 +28,7 @@ export function ExerciseCard({ data, ...rest }: Props) {
       >
         <Image
           source={{
-            uri: 'https://s2-ge.glbimg.com/u7ggtx-50ZJ_sW1YWiQ-gkAYNH0=/1200x/smart/filters:cover():strip_icc()/s.glbimg.com/es/ge/f/original/2017/07/14/istock-538489090.jpg',
+            uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}`,
           }}
           alt='Imagem do exercício'
           w='$16'
