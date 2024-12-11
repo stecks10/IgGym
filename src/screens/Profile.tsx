@@ -7,13 +7,31 @@ import { useState } from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 
 import { ToastMessage } from '@components/ToastMessage';
+import { useAuth } from '@hooks/useAuth';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
+import { Controller, useForm } from 'react-hook-form';
+
+type FormDataProps = {
+  name: string;
+  email: string;
+  password: string;
+  old_password: string;
+  password_confirm: string;
+};
 
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/stecks10.png');
 
   const toast = useToast();
+  const { user } = useAuth();
+
+  const { control } = useForm<FormDataProps>({
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+    },
+  });
 
   async function handleUserPhotoSelection() {
     try {
@@ -44,7 +62,6 @@ export function Profile() {
                 title='Imagem muito grande'
                 description='Escolha uma imagem com no máximo 5MB'
                 action='error'
-                onClose={() => toast.close(id)}
               />
             ),
           });
@@ -62,7 +79,6 @@ export function Profile() {
             title='Erro ao escolher a foto'
             description='Ocorreu um erro ao escolher a foto'
             action='error'
-            onClose={() => toast.close(id)}
           />
         ),
       });
@@ -92,8 +108,30 @@ export function Profile() {
             </Text>
           </TouchableOpacity>
           <Center w={'$full'} gap={'$4'}>
-            <Input placeholder='Nome' bg='$gray600' />
-            <Input value='stecks10@gmail.com' bg='$gray600' isReadOnly />
+            <Controller
+              control={control}
+              name='name'
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder='Nome'
+                  bg='$gray600'
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name='email'
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder='E-mail'
+                  bg='$gray600'
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
           </Center>
 
           <Heading
@@ -108,8 +146,42 @@ export function Profile() {
           </Heading>
 
           <Center w={'$full'} gap={'$4'}>
-            <Input placeholder='Senha Antiga' bg='$gray600' />
-            <Input placeholder='Nova senha' bg='$gray600' />
+            <Controller
+              control={control}
+              name='password'
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder='Senha antiga'
+                  bg='$gray600'
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name='password'
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder='Nova senha'
+                  bg='$gray600'
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name='password_confirm'
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder='Confirme a nova senha'
+                  bg='$gray600'
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
 
             <Button title='Atualizar' />
           </Center>
