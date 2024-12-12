@@ -108,11 +108,32 @@ export function Profile() {
           name: `${user.name}.${fileExtension}`.toLowerCase(),
           uri: photoUri,
           type: `${photoSelected.assets[0].type}/${fileExtension}`,
-        };
-        console.log(photoFile);
+        } as any;
+
+        const userPhotoUploadedForm = new FormData();
+        userPhotoUploadedForm.append('avatar', photoFile);
+
+        await api.patch('/users/avatar', userPhotoUploadedForm, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => (
+            <ToastMessage
+              id={id}
+              title='Foto atualizada'
+              description='Sua foto foi atualizada com sucesso'
+              action='success'
+            />
+          ),
+        });
+
+        setUserPhoto(photoUri);
       }
     } catch (error) {
-      console.error(error);
       toast.show({
         placement: 'top',
         render: ({ id }) => (
