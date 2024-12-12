@@ -17,9 +17,9 @@ import * as yup from 'yup';
 type FormDataProps = {
   name: string;
   email: string;
-  password: string;
+  password: string | null;
   old_password: string;
-  password_confirm: string;
+  confirm_password: string | null;
 };
 
 export function Profile() {
@@ -33,9 +33,20 @@ export function Profile() {
       .required('Nome obrigatório')
       .min(3, 'No mínimo 3 dígitos'),
     email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
-    password: yup.string().required('Senha obrigatória'),
     old_password: yup.string().required('Senha antiga obrigatória'),
-    password_confirm: yup.string().required('Confirmação de senha obrigatória'),
+    password: yup
+      .string()
+      .min(6, 'A senha deve ter pelo menos 6 dígitos.')
+      .nullable()
+      .transform((value) => (!!value ? value : null)),
+    confirm_password: yup
+      .string()
+      .nullable()
+      .transform((value) => (!!value ? value : null))
+      .oneOf(
+        [yup.ref('password'), null],
+        'A confirmação de senha não confere.'
+      ),
   });
 
   const { user } = useAuth();
@@ -50,11 +61,10 @@ export function Profile() {
       email: user.email,
       password: '',
       old_password: '',
-      password_confirm: '',
+      confirm_password: '',
     },
-    resolver: yupResolver(profileSchema),
+    resolver: yupResolver(profileSchema as yup.ObjectSchema<FormDataProps>),
   });
-
   async function handleUserPhotoSelection() {
     try {
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
@@ -108,7 +118,7 @@ export function Profile() {
   }
 
   async function handleProfileUpdate(data: FormDataProps) {
-    console.log(data);
+    console.log(handleSubmit), console.log(data);
   }
 
   return (
@@ -182,9 +192,9 @@ export function Profile() {
                 <Input
                   placeholder='Senha antiga'
                   bg='$gray600'
+                  secureTextEntry
                   onChangeText={onChange}
                   value={value}
-                  secureTextEntry
                   textContentType='oneTimeCode'
                 />
               )}
@@ -195,10 +205,10 @@ export function Profile() {
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder='Nova senha'
+                  secureTextEntry
                   bg='$gray600'
                   onChangeText={onChange}
-                  value={value}
-                  secureTextEntry
+                  value={value as string | undefined}
                   errorMessage={errors.password?.message}
                   textContentType='oneTimeCode'
                 />
@@ -206,16 +216,16 @@ export function Profile() {
             />
             <Controller
               control={control}
-              name='password_confirm'
+              name='confirm_password'
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder='Confirme a nova senha'
                   bg='$gray600'
-                  onChangeText={onChange}
-                  value={value}
                   secureTextEntry
+                  onChangeText={onChange}
+                  value={value as string | undefined}
                   textContentType='oneTimeCode'
-                  errorMessage={errors.password_confirm?.message}
+                  errorMessage={errors.confirm_password?.message}
                 />
               )}
             />
