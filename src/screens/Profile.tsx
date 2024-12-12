@@ -33,19 +33,26 @@ export function Profile() {
       .required('Nome obrigatório')
       .min(3, 'No mínimo 3 dígitos'),
     email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
-    old_password: yup.string().required('Senha antiga obrigatória'),
+    old_password: yup.string().notRequired(),
     password: yup
       .string()
-      .min(6, 'A senha deve ter pelo menos 6 dígitos.')
       .nullable()
-      .transform((value) => (!!value ? value : null)),
+      .transform((value) => (!!value ? value : null))
+      .min(6, 'A senha deve ter pelo menos 6 dígitos.')
+      .when('old_password', (old_password, schema) =>
+        old_password
+          ? schema.required('Nova senha obrigatória')
+          : schema.nullable()
+      ),
     confirm_password: yup
       .string()
       .nullable()
       .transform((value) => (!!value ? value : null))
-      .oneOf(
-        [yup.ref('password'), null],
-        'A confirmação de senha não confere.'
+      .oneOf([yup.ref('password'), null], 'A confirmação de senha não confere.')
+      .when('password', (password, schema) =>
+        password
+          ? schema.required('Confirmação de senha obrigatória')
+          : schema.nullable()
       ),
   });
 
