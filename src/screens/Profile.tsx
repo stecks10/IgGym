@@ -9,10 +9,12 @@ import { ScrollView, TouchableOpacity } from 'react-native';
 import { ToastMessage } from '@components/ToastMessage';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '@hooks/useAuth';
+import { AppError } from '@utils/AppError';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { api } from '../service/api';
 
 type FormDataProps = {
   name: string;
@@ -24,36 +26,27 @@ type FormDataProps = {
 
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/stecks10.png');
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const toast = useToast();
 
   const profileSchema = yup.object({
-    name: yup
-      .string()
-      .required('Nome obrigatório')
-      .min(3, 'No mínimo 3 dígitos'),
-    email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
-    old_password: yup.string().notRequired(),
+    name: yup.string().required('Informe o nome'),
     password: yup
       .string()
-      .nullable()
-      .transform((value) => (!!value ? value : null))
       .min(6, 'A senha deve ter pelo menos 6 dígitos.')
-      .when('old_password', (old_password, schema) =>
-        old_password
-          ? schema.required('Nova senha obrigatória')
-          : schema.nullable()
-      ),
+      .nullable()
+      .transform((value) => (!!value ? value : null)),
     confirm_password: yup
       .string()
       .nullable()
       .transform((value) => (!!value ? value : null))
       .oneOf([yup.ref('password'), null], 'A confirmação de senha não confere.')
-      .when('password', (password, schema) =>
-        password
-          ? schema.required('Confirmação de senha obrigatória')
-          : schema.nullable()
-      ),
+      .when('password', (password, schema) => {
+        return password
+          ? schema.transform((value) => (!!value ? value : null))
+          : schema.nullable();
+      }),
   });
 
   const { user } = useAuth();
@@ -125,7 +118,41 @@ export function Profile() {
   }
 
   async function handleProfileUpdate(data: FormDataProps) {
-    console.log(handleSubmit), console.log(data);
+    try {
+      setIsUpdating(true);
+      await api.put('/users', data);
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title='Perfil atualizado'
+            description='Seu perfil foi atualizado com sucesso'
+            action='success'
+          />
+        ),
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível atualizar o perfil';
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            description='Tente novamente mais tarde'
+            action='error'
+          />
+        ),
+      });
+    } finally {
+      setIsUpdating(false);
+    }
   }
 
   return (
@@ -240,6 +267,7 @@ export function Profile() {
             <Button
               title='Atualizar'
               onPress={handleSubmit(handleProfileUpdate)}
+              isLoading={isUpdating}
             />
           </Center>
         </Center>
