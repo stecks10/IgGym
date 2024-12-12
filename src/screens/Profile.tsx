@@ -6,6 +6,7 @@ import { Center, Heading, Text, VStack, useToast } from '@gluestack-ui/themed';
 import { useState } from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 
+import defaultUserPhotoImg from '@assets/userPhotoDefault.png';
 import { ToastMessage } from '@components/ToastMessage';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '@hooks/useAuth';
@@ -25,7 +26,7 @@ type FormDataProps = {
 };
 
 export function Profile() {
-  const [userPhoto, setUserPhoto] = useState('https://github.com/stecks10.png');
+  const [userPhoto, setUserPhoto] = useState();
   const [isUpdating, setIsUpdating] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const toast = useToast();
@@ -139,8 +140,6 @@ export function Profile() {
             />
           ),
         });
-
-        setUserPhoto(photoUri);
       }
     } catch (error) {
       toast.show({
@@ -209,7 +208,11 @@ export function Profile() {
       <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt={'$6'} px={'$10'}>
           <UserPhoto
-            source={{ uri: userPhoto }}
+            source={
+              user.avatar
+                ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+                : defaultUserPhotoImg
+            }
             alt='Foto do usuário'
             size='xl'
           />

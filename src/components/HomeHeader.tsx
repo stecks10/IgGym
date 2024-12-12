@@ -6,6 +6,7 @@ import { LogOut } from 'lucide-react-native';
 
 import defaultUserPhotoImg from '@assets/userPhotoDefault.png';
 import { TouchableOpacity } from 'react-native';
+import { api } from '../service/api';
 
 export function HomeHeader() {
   const { user, signOut } = useAuth();
@@ -20,7 +21,11 @@ export function HomeHeader() {
       gap={'$4'}
     >
       <UserPhoto
-        source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
+        source={
+          user.avatar
+            ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+            : defaultUserPhotoImg
+        }
         alt='Photo do usuário'
         w={'$16'}
         h={'$16'}
