@@ -27,7 +27,7 @@ type FormDataProps = {
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/stecks10.png');
   const [isUpdating, setIsUpdating] = useState(false);
-
+  const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const toast = useToast();
 
   const profileSchema = yup.object({
@@ -65,8 +65,10 @@ export function Profile() {
     },
     resolver: yupResolver(profileSchema as yup.ObjectSchema<FormDataProps>),
   });
+
   async function handleUserPhotoSelection() {
     try {
+      setPhotoIsLoading(true);
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
@@ -99,7 +101,15 @@ export function Profile() {
           });
           return;
         }
-        setUserPhoto(photoUri);
+
+        const fileExtension = photoUri.split('.').pop();
+
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`.toLowerCase(),
+          uri: photoUri,
+          type: `${photoSelected.assets[0].type}/${fileExtension}`,
+        };
+        console.log(photoFile);
       }
     } catch (error) {
       console.error(error);
@@ -114,6 +124,8 @@ export function Profile() {
           />
         ),
       });
+    } finally {
+      setPhotoIsLoading(false);
     }
   }
 
