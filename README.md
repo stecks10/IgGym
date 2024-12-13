@@ -58,7 +58,7 @@ Além disso, um backend configurado para autenticação JWT e suporte às opera�
    ```bash
    npm start
    ```
-   5. Api:
+5. Api:
    ```bash
    https://drive.google.com/file/d/1EGEWwHZ-5VBNr8eoz87CeOYlzR6wOl4b/view
    ```
