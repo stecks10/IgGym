@@ -63,11 +63,11 @@ Além disso, um backend configurado para autenticação JWT e suporte às opera�
 ## Estrutura do Projeto
 
 iggym/ ├
-── assets/ #
-Recursos estáticos, como imagens e fontes
+
+- assets/ #
+  Recursos estáticos, como imagens e fontes
 
 - components/ # Componentes reutilizáveis da interface.
--
 - hooks/ # Hooks personalizados (e.g., useAuth).
 - screens/ # Telas do aplicativo.
 - services/ # Configuração de API e outras integrações externas.
