@@ -2,7 +2,7 @@ import { HistoryCard } from '@components/HistoryCard';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { ToastMessage } from '@components/ToastMessage';
 import { HistoryByDayDTO } from '@dtos/HistoryByDayDTO';
-import { Heading, Text, useToast, VStack } from '@gluestack-ui/themed';
+import { Heading, Spinner, Text, useToast, VStack } from '@gluestack-ui/themed';
 import { useFocusEffect } from '@react-navigation/native';
 import { AppError } from '@utils/AppError';
 import { useCallback, useState } from 'react';
@@ -41,6 +41,17 @@ export function History() {
     }, [])
   );
 
+  if (isLoading) {
+    return (
+      <VStack flex={1} alignItems='center' justifyContent='center'>
+        <Spinner color='$green500' size='small' />
+        <Text color='$gray200' mt={4}>
+          Carregando Histórico...
+        </Text>
+      </VStack>
+    );
+  }
+
   return (
     <VStack flex={1}>
       <ScreenHeader title='Histórico de Exercícios' />
@@ -50,7 +61,14 @@ export function History() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <HistoryCard data={item} />}
         renderSectionHeader={({ section }) => (
-          <Heading color='$gray200' fontSize='$md' mt='$10' mb='$3'>
+          <Heading
+            color='$gray200'
+            fontSize='$md'
+            mt='$10'
+            mb='$3'
+            backgroundColor='$green700'
+            rounded={'$md'}
+          >
             {section.title}
           </Heading>
         )}

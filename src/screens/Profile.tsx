@@ -26,7 +26,6 @@ type FormDataProps = {
 };
 
 export function Profile() {
-  const [userPhoto, setUserPhoto] = useState();
   const [isUpdating, setIsUpdating] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const toast = useToast();
@@ -56,6 +55,7 @@ export function Profile() {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormDataProps>({
     defaultValues: {
       name: user.name,
@@ -160,13 +160,45 @@ export function Profile() {
 
   async function handleProfileUpdate(data: FormDataProps) {
     try {
+      const hasChanges =
+        data.name !== user.name ||
+        (data.password && data.password.length > 0) ||
+        (data.old_password && data.old_password.length > 0);
+
+      if (!hasChanges) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => (
+            <ToastMessage
+              id={id}
+              title='Nenhuma alteração detectada'
+              description='Atualize algum campo antes de salvar.'
+            />
+          ),
+        });
+        return;
+      }
+
       setIsUpdating(true);
-      const userUpdated = user;
-      userUpdated.name = data.name;
 
-      await api.put('/users', data);
+      const updatedData = {
+        name: data.name,
+        ...(data.password && { password: data.password }),
+        ...(data.old_password && { old_password: data.old_password }),
+      };
 
+      await api.put('/users', updatedData);
+
+      const userUpdated = { ...user, name: data.name };
       await updateUserProfile(userUpdated);
+
+      reset({
+        name: userUpdated.name,
+        email: userUpdated.email,
+        password: '',
+        old_password: '',
+        confirm_password: '',
+      });
 
       toast.show({
         placement: 'top',
@@ -183,7 +215,7 @@ export function Profile() {
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
-        : 'Não foi possível atualizar o perfil';
+        : 'Não foi possível atualizar o perfil';
 
       toast.show({
         placement: 'top',
