@@ -38,7 +38,7 @@ Além disso, um backend configurado para autenticação JWT e suporte às opera�
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/seu-usuario/iggym.git
+   git clone https://github.com/stecks10/IgGym.git
    cd iggym
    ```
 
@@ -65,12 +65,12 @@ Além disso, um backend configurado para autenticação JWT e suporte às opera�
 iggym/ ├
 ── assets/ #
 Recursos estáticos, como imagens e fontes
-├── components/ # Componentes reutilizáveis da interface
-├── hooks/ # Hooks personalizados (e.g., useAuth)
-├── screens/ # Telas do aplicativo
-├── services/ # Configuração de API e outras integrações externas
-├── utils/ # Funções utilitárias e constantes
-└── App.tsx # Arquivo principal da aplicação
+├── components/ # Componentes reutilizáveis da interface.
+├── hooks/ # Hooks personalizados (e.g., useAuth).
+├── screens/ # Telas do aplicativo.
+├── services/ # Configuração de API e outras integrações externas.
+├── utils/ # Funções utilitárias e constantes.
+└── App.tsx # Arquivo principal da aplicação.
 
 ## Próximos Passos
 
