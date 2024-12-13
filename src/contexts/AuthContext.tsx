@@ -17,8 +17,8 @@ import { api } from '../service/api';
 export type AuthContextDataProps = {
   user: UserDTO;
   singIn: (email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
   updateUserProfile: (userUpdated: UserDTO) => Promise<void>;
+  signOut: () => Promise<void>;
   isLoadingUserStorageData: boolean;
 };
 
@@ -111,21 +111,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     loadUserData();
   }, []);
 
-  useEffect(() => {
-    const subscribe = api.registerInterceptTokenManager(signOut);
-
-    return () => {
-      subscribe();
-    };
-  }, [signOut]);
-
   return (
     <AuthContext.Provider
       value={{
         user,
         singIn,
-        signOut,
         updateUserProfile,
+        signOut,
         isLoadingUserStorageData,
       }}
     >
