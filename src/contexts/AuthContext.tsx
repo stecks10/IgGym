@@ -1,5 +1,3 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
-
 import {
   storageAuthTokenGet,
   storageAuthTokenRemove,
@@ -10,6 +8,7 @@ import {
   storageUserRemove,
   storageUserSave,
 } from '@storage/storageUser';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 
 import { UserDTO } from '@dtos/UserDTO';
 import { api } from '../service/api';
@@ -20,6 +19,7 @@ export type AuthContextDataProps = {
   updateUserProfile: (userUpdated: UserDTO) => Promise<void>;
   signOut: () => Promise<void>;
   isLoadingUserStorageData: boolean;
+  isRefreshingToken: boolean; // Novo estado para o loading global
 };
 
 type AuthContextProviderProps = {
@@ -34,10 +34,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] =
     useState(true);
+  const [isRefreshingToken, setIsRefreshingToken] = useState(false);
 
   async function userAndTokenUpdate(userData: UserDTO, token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
     setUser(userData);
   }
 
@@ -81,15 +81,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
-  async function updateUserProfile(userUpdated: UserDTO) {
-    try {
-      setUser(userUpdated);
-      await storageUserSave(userUpdated);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async function loadUserData() {
     try {
       setIsLoadingUserStorageData(true);
@@ -111,14 +102,23 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     loadUserData();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = api.registerInterceptTokenManager(signOut);
+
+    return () => {
+      unsubscribe();
+    };
+  }, [signOut]);
+
   return (
     <AuthContext.Provider
       value={{
         user,
         singIn,
-        updateUserProfile,
+        updateUserProfile: storageUserSave,
         signOut,
         isLoadingUserStorageData,
+        isRefreshingToken,
       }}
     >
       {children}

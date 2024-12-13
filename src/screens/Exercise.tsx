@@ -70,6 +70,11 @@ export function Exercise() {
   async function handleExerciseHistoryRegister() {
     try {
       setSendingRegister(true);
+
+      console.log(
+        'Authorization Header:',
+        api.defaults.headers.common['Authorization']
+      );
       await api.post('/history', { exercise_id: exerciseId });
 
       toast.show({
