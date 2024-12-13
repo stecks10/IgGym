@@ -49,9 +49,33 @@ Além disso, um backend configurado para autenticação JWT e suporte às opera�
    ```
 
 3. Inicie o projeto:
+
    ```bash
    npm start
    ```
+
+4. Inicie o projeto:
+   ```bash
+   npm start
+   ```
+   5. Api:
+   ```bash
+   https://drive.google.com/file/d/1EGEWwHZ-5VBNr8eoz87CeOYlzR6wOl4b/view
+   ```
+
+- Após a instalação, siga os passos abaixo:
+
+1. Vá até a pasta service no seu projeto.
+2. Abra o arquivo api.ts.
+3. Localize o campo da URL e substitua pelo endereço correto.
+
+- Para obter a URL no Expo:
+
+Execute o comando ifconfig (em macOS ou Linux) ou ipconfig (em Windows) no terminal.
+Encontre o endereço IP do seu dispositivo na saída do comando.
+Atualize a URL no arquivo api.ts com o IP obtido.
+
+```
 
 ## Scripts Disponíveis
 
@@ -65,7 +89,7 @@ Além disso, um backend configurado para autenticação JWT e suporte às opera�
 iggym/ ├
 
 - assets/ #
-  Recursos estáticos, como imagens e fontes
+Recursos estáticos, como imagens e fontes
 
 - components/ # Componentes reutilizáveis da interface.
 - hooks/ # Hooks personalizados (e.g., useAuth).
@@ -87,3 +111,4 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar
 ## Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais informações.
+```
