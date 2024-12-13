@@ -35,7 +35,6 @@ export function Home() {
       const title = isAppError
         ? error.message
         : 'Não foi possível carregar os grupos musculares';
-      console.log(error);
 
       toast.show({
         render: ({ id }) => (
@@ -56,7 +55,6 @@ export function Home() {
       const title = isAppError
         ? error.message
         : 'Não foi possível carregar os exercícios';
-      console.log(error);
 
       toast.show({
         render: ({ id }) => (

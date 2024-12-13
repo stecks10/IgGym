@@ -47,12 +47,9 @@ export function Exercise() {
     try {
       setIsLoading(true);
       const response = await api.get(`/exercises/${exerciseId}`);
-      console.log(response.data);
 
       setExercise(response.data);
     } catch (error) {
-      console.log(error);
-
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
@@ -70,11 +67,6 @@ export function Exercise() {
   async function handleExerciseHistoryRegister() {
     try {
       setSendingRegister(true);
-
-      console.log(
-        'Authorization Header:',
-        api.defaults.headers.common['Authorization']
-      );
       await api.post('/history', { exercise_id: exerciseId });
 
       toast.show({
